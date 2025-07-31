@@ -226,4 +226,14 @@ const HabitStats = ({ habits }) => {
   );
 };
 
-export default HabitStats;
+export default HabitStats;:text-gray-300 text-sm">Best Streak Ever</span>
+              <span className="font-bold text-purple-600 dark:text-purple-300">{bestStreak} days</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-300 text-sm">Total Streak Days</span>
+              <span className="font-bold text-green-600 dark:text-green-300">{totalStreakDays} days</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark
