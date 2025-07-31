@@ -32,7 +32,7 @@ const Navbar = () => {
   <div className="max-w-5xl mx-auto flex items-center justify-between px-4 py-3">
     {/* Logo on the left */}
     <span className="text-2xl font-bold text-purple-600 dark:text-pink-400 whitespace-nowrap">
-      Awesome Todo
+      Prodexa
     </span>
     {/* Links and buttons on the right */}
     <div className="flex items-center space-x-2">
