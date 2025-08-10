@@ -178,23 +178,21 @@ const PomodoroPage = () => {
 
   return (
     <div className={`py-8 min-h-screen bg-gradient-to-br ${modeConfig.bgColor} dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-all duration-1000`}>
-      {/* Overlay to hide gradient behind navbar in light mode */}
-      <div className="fixed top-0 left-0 w-full h-16 bg-white z-40 block dark:hidden"></div>
       <div className="max-w-4xl mx-auto px-4 relative z-10">
         {/* Header */}
-        <div className="text-center mb-8">
+        <div className="text-center mb-6 lg:mb-8">
           <div className="flex items-center justify-center space-x-3 mb-4">
-            <Icon className="w-12 h-12 text-white drop-shadow-lg" />
-            <h1 className="text-4xl font-bold text-white drop-shadow-lg">
+            <Icon className="w-8 sm:w-12 h-8 sm:h-12 text-white drop-shadow-lg" />
+            <h1 className="text-3xl sm:text-4xl font-bold text-white drop-shadow-lg">
               🍅 Pomodoro Timer
             </h1>
           </div>
-          <p className="text-white/80 text-lg">Focus better with the Pomodoro Technique</p>
+          <p className="text-white/80 text-base sm:text-lg">Focus better with the Pomodoro Technique</p>
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex justify-center mb-8">
-          <div className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm rounded-2xl p-2 flex space-x-2">
+        <div className="flex justify-center mb-6 lg:mb-8">
+          <div className="bg-white/20 dark:bg-gray-800/40 backdrop-blur-sm rounded-2xl p-2 flex flex-wrap sm:flex-nowrap space-y-2 sm:space-y-0 space-x-0 sm:space-x-2">
             {[
               { key: 'work', label: 'Work', icon: Brain },
               { key: 'shortBreak', label: 'Short Break', icon: Coffee },
@@ -203,27 +201,27 @@ const PomodoroPage = () => {
               <button
                 key={key}
                 onClick={() => switchMode(key)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl transition-all duration-200 ${
+                className={`flex items-center justify-center space-x-2 px-3 sm:px-4 py-2 rounded-xl transition-all duration-200 text-sm sm:text-base w-full sm:w-auto ${
                   mode === key
                     ? 'bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 shadow-lg'
                     : 'text-white dark:text-gray-200 hover:bg-white/20 dark:hover:bg-gray-900/20'
                 }`}
               >
-                <ModeIcon size={18} />
-                <span className="font-medium text-sm">{label}</span>
+                <ModeIcon size={16} className="sm:w-5 sm:h-5" />
+                <span className="font-medium whitespace-nowrap">{label}</span>
               </button>
             ))}
           </div>
         </div>
 
         {/* Main Timer */}
-        <div className="bg-white/95 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-3xl shadow-2xl p-8 mb-8">
+        <div className="bg-white/95 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-3xl shadow-2xl p-4 sm:p-8 mb-6 lg:mb-8">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-100 mb-6">{modeConfig.title}</h2>
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-100 mb-4 sm:mb-6">{modeConfig.title}</h2>
             
-            {/* Circular Progress */}
-            <div className="relative w-64 h-64 mx-auto mb-8">
-              <svg className="w-64 h-64 transform -rotate-90" viewBox="0 0 256 256">
+            {/* Circular Progress - Responsive */}
+            <div className="relative w-48 sm:w-56 md:w-64 h-48 sm:h-56 md:h-64 mx-auto mb-6 sm:mb-8">
+              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 256 256">
                 <circle
                   cx="128"
                   cy="128"
@@ -252,41 +250,41 @@ const PomodoroPage = () => {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-6xl font-bold text-gray-800 dark:text-gray-100 mb-2">
+                  <div className="text-4xl sm:text-5xl md:text-6xl font-bold text-gray-800 dark:text-gray-100 mb-2">
                     {formatTime(timeLeft)}
                   </div>
-                  <div className="text-gray-600 dark:text-gray-300 font-medium">
+                  <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">
                     {isActive ? 'Running' : 'Paused'}
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Controls */}
-            <div className="flex justify-center space-x-4">
+            {/* Controls - Responsive */}
+            <div className="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4">
               <button
                 onClick={toggleTimer}
-                className={`flex items-center space-x-2 px-8 py-4 bg-gradient-to-r ${modeConfig.color} text-white rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105`}
+                className={`flex items-center justify-center space-x-2 px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r ${modeConfig.color} text-white rounded-xl hover:shadow-lg transition-all duration-200 transform hover:scale-105 w-full sm:w-auto`}
               >
-                {isActive ? <Pause size={24} /> : <Play size={24} />}
-                <span className="font-semibold text-lg">
+                {isActive ? <Pause size={20} className="sm:w-6 sm:h-6" /> : <Play size={20} className="sm:w-6 sm:h-6" />}
+                <span className="font-semibold text-base sm:text-lg">
                   {isActive ? 'Pause' : 'Start'}
                 </span>
               </button>
               
               <button
                 onClick={resetTimer}
-                className="flex items-center space-x-2 px-6 py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors duration-200"
+                className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 sm:py-4 bg-gray-500 text-white rounded-xl hover:bg-gray-600 transition-colors duration-200 w-full sm:w-auto"
               >
-                <RotateCcw size={20} />
+                <RotateCcw size={18} className="sm:w-5 sm:h-5" />
                 <span className="font-medium">Reset</span>
               </button>
               
               <button
                 onClick={() => setShowSettings(!showSettings)}
-                className="flex items-center space-x-2 px-6 py-4 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors duration-200"
+                className="flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 sm:py-4 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors duration-200 w-full sm:w-auto"
               >
-                <Settings size={20} />
+                <Settings size={18} className="sm:w-5 sm:h-5" />
                 <span className="font-medium">Settings</span>
               </button>
             </div>
@@ -295,9 +293,9 @@ const PomodoroPage = () => {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="bg-white/95 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-2xl shadow-2xl p-6 mb-8">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Timer Settings</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="bg-white/95 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-2xl shadow-2xl p-4 sm:p-6 mb-6 lg:mb-8">
+            <h3 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-100 mb-4">Timer Settings</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-2">Work Time (minutes)</label>
                 <input
@@ -346,23 +344,23 @@ const PomodoroPage = () => {
           </div>
         )}
 
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-6 text-center">
-            <div className="text-3xl font-bold text-purple-600 dark:text-purple-300">{sessions}</div>
-            <div className="text-gray-600 dark:text-gray-300 font-medium">Today's Sessions</div>
+        {/* Stats - Improved Responsive Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-purple-600 dark:text-purple-300">{sessions}</div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">Today's Sessions</div>
           </div>
-          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-6 text-center">
-            <div className="text-3xl font-bold text-blue-600 dark:text-blue-300">{stats.totalSessions}</div>
-            <div className="text-gray-600 dark:text-gray-300 font-medium">Total Sessions</div>
+          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-blue-600 dark:text-blue-300">{stats.totalSessions}</div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">Total Sessions</div>
           </div>
-          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-6 text-center">
-            <div className="text-3xl font-bold text-green-600 dark:text-green-300">{Math.round(stats.totalWorkTime / 60)}h</div>
-            <div className="text-gray-600 dark:text-gray-300 font-medium">Total Focus Time</div>
+          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-green-600 dark:text-green-300">{Math.round(stats.totalWorkTime / 60)}h</div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">Total Focus Time</div>
           </div>
-          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-6 text-center">
-            <div className="text-3xl font-bold text-orange-600 dark:text-orange-300">{Math.round(stats.totalBreakTime / 60)}h</div>
-            <div className="text-gray-600 dark:text-gray-300 font-medium">Total Break Time</div>
+          <div className="bg-white/90 dark:bg-gray-800/90 dark:text-gray-100 backdrop-blur-sm rounded-xl p-4 sm:p-6 text-center">
+            <div className="text-2xl sm:text-3xl font-bold text-orange-600 dark:text-orange-300">{Math.round(stats.totalBreakTime / 60)}h</div>
+            <div className="text-gray-600 dark:text-gray-300 font-medium text-sm sm:text-base">Total Break Time</div>
           </div>
         </div>
       </div>
