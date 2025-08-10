@@ -103,14 +103,24 @@ const HabitStats = ({ habits }) => {
           
           <div className="space-y-3">
             <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-300 text-sm">Best Streak Ever</span>
+              <span className="font-bold text-purple-600 dark:text-purple-300">{bestStreak} days</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
+              <span className="text-gray-600 dark:text-gray-300 text-sm">Total Streak Days</span>
+              <span className="font-bold text-green-600 dark:text-green-300">{totalStreakDays} days</span>
+            </div>
+            
+            <div className="flex justify-between items-center">
               <span className="text-gray-600 dark:text-gray-300 text-sm">Total Completions</span>
               <span className="font-bold text-blue-600 dark:text-blue-300">{totalCompletions}</span>
             </div>
             
             <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark:text-gray-300 text-sm">Perfect Days</span>
+              <span className="text-gray-600 dark:text-gray-300 text-sm">Today's Progress</span>
               <span className="font-bold text-yellow-600 dark:text-yellow-300">
-                {habits.length > 0 ? Math.round((completedToday / totalHabits) * 100) : 0}% today
+                {totalHabits > 0 ? Math.round((completedToday / totalHabits) * 100) : 0}%
               </span>
             </div>
           </div>
@@ -226,14 +236,4 @@ const HabitStats = ({ habits }) => {
   );
 };
 
-export default HabitStats;:text-gray-300 text-sm">Best Streak Ever</span>
-              <span className="font-bold text-purple-600 dark:text-purple-300">{bestStreak} days</span>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark:text-gray-300 text-sm">Total Streak Days</span>
-              <span className="font-bold text-green-600 dark:text-green-300">{totalStreakDays} days</span>
-            </div>
-            
-            <div className="flex justify-between items-center">
-              <span className="text-gray-600 dark
+export default HabitStats;

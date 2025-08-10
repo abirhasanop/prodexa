@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit3, Trash2, Flame, Calendar, Target, TrendingUp } from 'lucide-react';
+import { Edit3, Trash2, Flame, Calendar, Target, TrendingUp, Clock } from 'lucide-react';
 
 const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) => {
   const categories = [
@@ -17,12 +17,22 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
     { value: 'hard', label: 'Hard', icon: '🔴', colorClass: 'text-red-600 bg-red-100 dark:bg-red-900 dark:text-red-300' }
   ];
 
+  const daysOfWeek = [
+    { value: 'sunday', label: 'Sun', fullName: 'Sunday' },
+    { value: 'monday', label: 'Mon', fullName: 'Monday' },
+    { value: 'tuesday', label: 'Tue', fullName: 'Tuesday' },
+    { value: 'wednesday', label: 'Wed', fullName: 'Wednesday' },
+    { value: 'thursday', label: 'Thu', fullName: 'Thursday' },
+    { value: 'friday', label: 'Fri', fullName: 'Friday' },
+    { value: 'saturday', label: 'Sat', fullName: 'Saturday' }
+  ];
+
   const getCategoryConfig = (category) => {
-    return categories.find(cat => cat.value === category) || categories[0];
+    return categories.find(cat => cat.value === category) || categories[2]; // default to personal
   };
 
   const getDifficultyConfig = (difficulty) => {
-    return difficulties.find(diff => diff.value === difficulty) || difficulties[0];
+    return difficulties.find(diff => diff.value === difficulty) || difficulties[1]; // default to medium
   };
 
   const getStreakColor = (streak) => {
@@ -59,10 +69,41 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
     return last7Days;
   };
 
+  // Check if today is a scheduled day for this habit
+  const isTodayScheduled = () => {
+    if (!habit.scheduledDays || habit.scheduledDays.length === 0) return true; // If no schedule set, assume all days
+    
+    const today = new Date();
+    const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+    const todayName = dayNames[today.getDay()];
+    
+    return habit.scheduledDays.includes(todayName);
+  };
+
+  // Get scheduled days display
+  const getScheduledDaysDisplay = () => {
+    if (!habit.scheduledDays || habit.scheduledDays.length === 0) return 'Every day';
+    if (habit.scheduledDays.length === 7) return 'Every day';
+    if (habit.scheduledDays.length === 5 && 
+        ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'].every(day => habit.scheduledDays.includes(day))) {
+      return 'Weekdays';
+    }
+    if (habit.scheduledDays.length === 2 && 
+        ['saturday', 'sunday'].every(day => habit.scheduledDays.includes(day))) {
+      return 'Weekends';
+    }
+    
+    return habit.scheduledDays
+      .map(day => daysOfWeek.find(d => d.value === day)?.label)
+      .filter(Boolean)
+      .join(', ');
+  };
+
   const categoryConfig = getCategoryConfig(habit.category);
   const difficultyConfig = getDifficultyConfig(habit.difficulty);
   const completionRate = getCompletionRate();
   const last7Days = getLast7Days();
+  const todayScheduled = isTodayScheduled();
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 hover:shadow-2xl transition-all duration-200 transform hover:scale-[1.02]">
@@ -70,7 +111,7 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
       <div className="flex items-start justify-between mb-4">
         <div className="flex-1">
           <div className="flex items-center space-x-2 mb-2">
-            <div className="text-2xl">{habit.icon}</div>
+            <div className="text-2xl">{habit.icon || '🎯'}</div>
             <h3 className="text-xl font-bold text-gray-800 dark:text-gray-100">{habit.name}</h3>
           </div>
           
@@ -86,11 +127,15 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
             <span className={`px-3 py-1 rounded-full text-xs font-medium ${difficultyConfig.colorClass}`}>
               {difficultyConfig.icon} {difficultyConfig.label}
             </span>
-            {habit.targetDays && (
+            {habit.targetDays && habit.targetDays < 7 && (
               <span className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200">
                 🎯 {habit.targetDays} days/week
               </span>
             )}
+            <span className="px-3 py-1 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200 flex items-center">
+              <Clock size={10} className="mr-1" />
+              {getScheduledDaysDisplay()}
+            </span>
           </div>
         </div>
         
@@ -116,8 +161,8 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
       {/* Stats Row */}
       <div className="grid grid-cols-3 gap-4 mb-4">
         <div className="text-center">
-          <div className={`text-2xl font-bold ${getStreakColor(habit.currentStreak)}`}>
-            {habit.currentStreak}
+          <div className={`text-2xl font-bold ${getStreakColor(habit.currentStreak || 0)}`}>
+            {habit.currentStreak || 0}
           </div>
           <div className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-center">
             <Flame size={12} className="mr-1" />
@@ -160,7 +205,7 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
                   ? 'bg-green-500 text-white shadow-md' 
                   : 'bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
               }`}>
-                ✓
+                {day.completed ? '✓' : '○'}
               </div>
               <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 {day.dayName}
@@ -172,24 +217,34 @@ const HabitCard = ({ habit, onEdit, onDelete, onToggleToday, todayCompletion }) 
 
       {/* Today's Action */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
-        <button
-          onClick={() => onToggleToday(habit.id)}
-          className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
-            todayCompletion?.completed
-              ? 'bg-green-500 text-white shadow-lg hover:bg-green-600'
-              : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg'
-          }`}
-        >
-          {todayCompletion?.completed ? '✅ Completed Today!' : '⚡ Mark as Done Today'}
-        </button>
-        
-        {todayCompletion?.completed && todayCompletion.completedAt && (
-          <div className="text-center mt-2 text-xs text-gray-500 dark:text-gray-400">
-            Completed at {new Date(todayCompletion.completedAt).toLocaleTimeString('en-US', { 
-              hour: '2-digit', 
-              minute: '2-digit' 
-            })}
+        {!todayScheduled ? (
+          <div className="text-center py-3 px-4 bg-gray-100 dark:bg-gray-700 rounded-xl">
+            <span className="text-gray-600 dark:text-gray-400 text-sm">
+              📅 Not scheduled for today
+            </span>
           </div>
+        ) : (
+          <>
+            <button
+              onClick={() => onToggleToday(habit.id)}
+              className={`w-full py-3 rounded-xl font-semibold transition-all duration-200 transform hover:scale-105 ${
+                todayCompletion?.completed
+                  ? 'bg-green-500 text-white shadow-lg hover:bg-green-600'
+                  : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg'
+              }`}
+            >
+              {todayCompletion?.completed ? '✅ Completed Today!' : '⚡ Mark as Done Today'}
+            </button>
+            
+            {todayCompletion?.completed && todayCompletion.completedAt && (
+              <div className="text-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                Completed at {new Date(todayCompletion.completedAt).toLocaleTimeString('en-US', { 
+                  hour: '2-digit', 
+                  minute: '2-digit' 
+                })}
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
